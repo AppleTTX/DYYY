@@ -1,7 +1,7 @@
 Package: com.huami.dyyy
-Name: DYYY
-Version: 2.2-9
-Description: 仅供学习交流，请在 24 小时内自觉删除。
+Name: DYYY (重编版)
+Version: 2.4-1
+Description: 基于 2.2-9 源码重编：保留首次使用协议；移除播放控制、弹幕、属地随机渐变、悬浮按钮；新增「底栏按钮隐藏」设置（支持点击显形、仅隐藏文字）。
 Homepage: https://github.com/huami1314/DYYY
 Section: Tweaks
 Depends: firmware (>= 5.0), mobilesubstrate

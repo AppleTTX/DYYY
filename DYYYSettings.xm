@@ -293,7 +293,9 @@ void showDYYYSettingsVC(UIViewController *rootVC, BOOL hasAgreed) {
           }
       ];
 
+      NSSet *removedAppearance = [NSSet setWithArray:@[ @"DYYYEnableDanmuColor", @"DYYYDanmuColor", @"DYYYDanmuRainbowRotating" ]];
       for (NSDictionary *dict in appearanceSettings) {
+          if ([removedAppearance containsObject:dict[@"identifier"]]) continue;
           AWESettingItemModel *item = [DYYYSettingsHelper createSettingItem:dict cellTapHandlers:cellTapHandlers];
           [appearanceItems addObject:item];
       }
@@ -413,7 +415,9 @@ void showDYYYSettingsVC(UIViewController *rootVC, BOOL hasAgreed) {
           }
       ];
 
+      NSSet *removedVideo = [NSSet setWithArray:@[ @"DYYYEnableAutoPlay", @"DYYYEnableBackgroundListen", @"DYYYDisableCastVPNCheck", @"DYYYDefaultSpeed", @"DYYYLongPressSpeed", @"DYYYEnableLongPressSpeedGesture", @"DYYYEnableRandomGradient" ]];
       for (NSDictionary *dict in videoSettings) {
+          if ([removedVideo containsObject:dict[@"identifier"]]) continue;
           AWESettingItemModel *item = [DYYYSettingsHelper createSettingItem:dict cellTapHandlers:cellTapHandlers];
 
           if ([item.identifier isEqualToString:@"DYYYDefaultSpeed"]) {
@@ -3202,7 +3206,51 @@ speedSettingsItem.detail = trimmedText;
       AWESettingBaseViewController *subVC = [DYYYSettingsHelper createSubSettingsViewController:@"悬浮按钮" sections:sections];
       [rootVC.navigationController pushViewController:(UIViewController *)subVC animated:YES];
     };
-    [mainItems addObject:floatButtonSettingItem];
+    // 悬浮按钮功能已移除：不再加入主菜单
+    // [mainItems addObject:floatButtonSettingItem];
+
+    // 底栏按钮隐藏
+    AWESettingItemModel *tabBarClearItem = [[%c(AWESettingItemModel) alloc] init];
+    tabBarClearItem.identifier = @"DYYYTabBarClearSettings";
+    tabBarClearItem.title = @"底栏按钮隐藏";
+    tabBarClearItem.type = 0;
+    tabBarClearItem.svgIconImageName = @"ic_eyeslash_outlined_20";
+    tabBarClearItem.cellType = 26;
+    tabBarClearItem.colorStyle = 0;
+    tabBarClearItem.isEnable = YES;
+    tabBarClearItem.cellTappedBlock = ^{
+      NSMutableArray<AWESettingItemModel *> *tabBarItems = [NSMutableArray array];
+      NSArray *tabBarSettings = @[
+          @{@"identifier" : @"DYYYTabBarClearEnabled",
+            @"title" : @"启用底栏按钮隐藏",
+            @"subTitle" : @"底栏不再持续高亮，点击仍然有效",
+            @"detail" : @"",
+            @"cellType" : @37,
+            @"imageName" : @"ic_eyeslash_outlined_16"},
+          @{@"identifier" : @"DYYYTabBarClearTapShow",
+            @"title" : @"点击底部先显示",
+            @"subTitle" : @"第一下只显示，第二下才切换页面；关闭则完全隐形直接点",
+            @"detail" : @"",
+            @"cellType" : @37,
+            @"imageName" : @"ic_speed_outlined_20"},
+          @{@"identifier" : @"DYYYTabBarClearTextOnly",
+            @"title" : @"只隐藏文字",
+            @"subTitle" : @"保留图标，仅去掉文字，抗烧屏效果弱一些",
+            @"detail" : @"",
+            @"cellType" : @37,
+            @"imageName" : @"ic_tag_outlined_20"}
+      ];
+      for (NSDictionary *dict in tabBarSettings) {
+          [tabBarItems addObject:[DYYYSettingsHelper createSettingItem:dict]];
+      }
+      NSMutableArray *sections = [NSMutableArray array];
+      [sections addObject:[DYYYSettingsHelper createSectionWithTitle:@"底栏按钮隐藏"
+                                                        footerTitle:@"隐藏后底栏不再持续发光，可显著降低 OLED 烧屏风险；功能与点击区域保持不变。"
+                                                              items:tabBarItems]];
+      AWESettingBaseViewController *subVC = [DYYYSettingsHelper createSubSettingsViewController:@"底栏按钮隐藏" sections:sections];
+      [rootVC.navigationController pushViewController:(UIViewController *)subVC animated:YES];
+    };
+    [mainItems addObject:tabBarClearItem];
 
     // 创建备份设置分类
     AWESettingSectionModel *backupSection = [[%c(AWESettingSectionModel) alloc] init];
