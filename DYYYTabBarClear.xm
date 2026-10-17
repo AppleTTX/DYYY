@@ -113,6 +113,8 @@ static void DYYYApplyTabBar(UIView *bar) {
     }
 }
 
+%group DYYYTabBarClearGroup
+
 %hook AWENormalModeTabBar
 
 - (void)layoutSubviews {
@@ -149,7 +151,10 @@ static void DYYYApplyTabBar(UIView *bar) {
 
 %end
 
+%end
+
 %ctor {
+    %init(DYYYTabBarClearGroup);
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     // 移除已裁剪功能的开关，避免旧配置让它们继续生效
     NSArray *removedKeys = @[
